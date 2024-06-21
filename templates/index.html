@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <title>Procesar Archivos Excel</title>
+    </head>
+    <body>
+        <h1>Subir y Procesar Archivo Excel, para obtener datos de catastro</h1>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+          <div>
+            <div class="inputFile">
+              <label for="fileInput1">* Cargar archivo de datos de demandas</label>
+              <input type="file" id="fileInput1" name="file_demanda" accept=".xlsx" required>
+            </div>
+            <div class="inputFile">
+              <label for="fileInput2">* Cargar archivo de datos de  PDR</label>
+              <input type="file" id="fileInput2" name="file_pdr" accept=".xlsx" required>
+            </div>
+          </div>
+          <button type="submit">Subir Archivo</button>
+        </form>
+      <br>
+      <div class="selectContainer">
+        <label for="selectSector">* Seleccione el sector:</label>
+        <select id="selectSector" name="sector" required>
+            <option value="" disabled selected>Seleccione un sector</option>
+        </select>
+      </div>
+      <br>
+      <button id="processButton" disabled>Procesar Archivo</button>
+      <br>
+      <a id="downloadLink" style="display:none;">Descargar Archivo Procesado</a>
+      
+      <div id="loaderOverlay" class="loader-overlay">
+        <div class="loader"></div>
+      </div>
+
+      <script>
+        let uploadedFileNames = [];
+        let list_sectors = [];
+        const loader = document.getElementById('loaderOverlay');
+        
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            const file_demanda = document.getElementById('fileInput1');
+            const file_pdr = document.getElementById('fileInput2')
+            formData.append('file_demanda', fileInput1.files[0]);
+            formData.append('file_pdr', fileInput2.files[0]);
+
+            loader.style.display = 'flex';
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                  uploadedFileNames  = data.filenames;
+                  list_sectors = data.list_sectors
+                  list_sectors.unshift('')
+                  const selectSector = document.getElementById('selectSector');
+                  selectSector.innerHTML = '';
+                  
+                  list_sectors.forEach(sector => {
+                    const option = document.createElement('option');
+                    option.value = sector;
+                    option.textContent = sector;
+                    selectSector.appendChild(option);
+                  });
+
+                  document.getElementById('processButton').disabled = false;
+                }
+            })
+            .catch(error => console.error('Error:', error))
+            .finally(() => {
+                loader.style.display = 'none';
+            });
+        });
+
+        document.getElementById('processButton').addEventListener('click', function() {
+            const selectSector = document.getElementById('selectSector');
+            const sector = selectSector.value
+            if(sector === ''){
+              alert('Debe seleccionar un sector')
+              return
+            }
+
+            loader.style.display = 'flex';
+            fetch('/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filenames: uploadedFileNames, area : sector })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    downloadLink = document.getElementById('downloadLink');
+                    downloadLink.href = `/download/${data.processed_file}`;
+                    downloadLink.style.display = 'block';
+                    downloadLink.innerText = 'Descargar Archivo Procesado';
+                }
+            })
+            .catch(error => console.error('Error:', error))
+            .finally(() => {
+                loader.style.display = 'none';
+            });
+        });
+    </script>
+      
+    </body>
+    </html>
