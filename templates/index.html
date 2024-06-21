@@ -23,6 +23,33 @@
           <button type="submit">Subir Archivo</button>
         </form>
       <br>
+
+      
+      <h3 id="selectoresColumns">Establesca las relaciones de las columnas del archivo de demandas con las etiquetas de cada selector.</h3>
+      <div class="listSelectoresColunm">
+        <div id="selectorsContainer" class="selectorsContainers">
+          <!-- selectores de columnas -->  
+        </div>
+      </div>
+      <br>
+      
+      <h3 id="selectoresColumnsPostes">Establesca las relaciones de las columnas del libro de postes con las etiquetas de cada selector.</h3>
+      <div class="listSelectoresColunm">
+        <div id="selectorsContainerPostes" class="selectorsContainers">
+          <!-- selectores de columnas -->  
+        </div>
+      </div>
+      <br>
+
+
+      <h3 id="selectoresColumnsTanquilla">Establesca las relaciones de las columnas del libro de tamquillas con las etiquetas de cada selector.</h3>
+      <div class="listSelectoresColunm">
+        <div id="selectorsContainerTanquillas" class="selectorsContainers">
+          <!-- selectores de columnas -->  
+        </div>
+      </div>
+
+      <br>
       <div class="selectContainer">
         <label for="selectSector">* Seleccione el sector:</label>
         <select id="selectSector" name="sector" required>
@@ -64,10 +91,125 @@
                 } else {
                   uploadedFileNames  = data.filenames;
                   list_sectors = data.list_sectors
+                  list_columns_demanda = data.list_columns_demanda
+                  list_columns_postes = data.list_columns_postes
+                  list_columns_tanquillas = data.list_columns_tanquillas
+
+                  list_columns_tanquillas.unshift('')
+                  list_columns_demanda.unshift('')
                   list_sectors.unshift('')
+
+                  const columns = ['cod_parc', 'parroquia', 'Tipo de Vía', 'Dirección', 'Uso Inmueble', 
+                  'Nombre Inmueble', 'Tipo Inmueble', 'Fecha', 'Total Unidades', 'Total Residenciales', 'Total Comerciales', 
+                  'Total Oficinas', 'Total Medico Asistencial', 'Total Gubernamental', 'Total Educativo', 'Manzana asignada', 
+                  'Total Religioso', 'Total construccion', 'Total abandonadas', 'Total Plaza', 'Total Parques', 'sectores'];
+
+                  columns_postes = ['Punto de referencia', 'Tipo de Poste', 'El poste tiene código', 'Fecha Levantaamiento', 'Nro. Poste', 'Manzana Asignada', 'sector']
+                  columns_tanquilla = ['Punto de Referencia', 'Tipo de tanquilla',	'Fecha Levantamiento', 'sector',	'Manzana asignada']
+
+                  const selectorsContainer = document.getElementById('selectorsContainer');
+                  const selectorsContainerPostes = document.getElementById('selectorsContainerPostes');
                   const selectSector = document.getElementById('selectSector');
+                  const selectoresColumns = document.getElementById('selectoresColumns')  
+                  const selectoresColumnsPostes = document.getElementById('selectoresColumnsPostes')
+                  const selectoresColumnsTanquilla = document.getElementById('selectoresColumnsTanquilla') 
+
+                  selectorsContainer.innerHTML = '';
                   selectSector.innerHTML = '';
+                  selectoresColumns.style.display = 'flex'
+                  selectoresColumnsPostes.style.display = 'flex'
+                  selectoresColumnsTanquilla.style.display = 'flex'
+
+                  columns.forEach(column => {
+                    const div = document.createElement('div');
+                    div.classList.add('selectContainerColumn');
+                    const label = document.createElement('label');
+                    label.textContent = `* Relacionado con: ${column}:`;
+                    const select = document.createElement('select');
+                    select.name = column;
+                    select.required = true;
+                    
+                    // Agregar opción por defecto
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = `Relacionado con: ${column}`;
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    select.appendChild(defaultOption);
+
+                    // Llenar select con list_sectors
+                    list_columns_demanda.forEach(column => {
+                      const option = document.createElement('option');
+                      option.value = column;
+                      option.textContent = column;
+                      select.appendChild(option);
+                    });
+
+                    div.appendChild(label);
+                    div.appendChild(select);
+                    selectorsContainer.appendChild(div);
+                  });
+
+                  columns_postes.forEach(column => {
+                    const div = document.createElement('div');
+                    div.classList.add('selectContainerColumn');
+                    const label = document.createElement('label');
+                    label.textContent = `* Relacionado con: ${column}:`;
+                    const select = document.createElement('select');
+                    select.name = column;
+                    select.required = true;
+                    
+                    // Agregar opción por defecto
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = `Relacionado con: ${column}`;
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    select.appendChild(defaultOption);
+
+                    // Llenar select con list_sectors
+                    list_columns_postes.forEach(column => {
+                      const option = document.createElement('option');
+                      option.value = column;
+                      option.textContent = column;
+                      select.appendChild(option);
+                    });
+
+                    div.appendChild(label);
+                    div.appendChild(select);
+                    selectorsContainerPostes.appendChild(div);
+                  });
                   
+                  columns_tanquilla.forEach(column => {
+                    const div = document.createElement('div');
+                    div.classList.add('selectContainerColumn');
+                    const label = document.createElement('label');
+                    label.textContent = `* Relacionado con: ${column}:`;
+                    const select = document.createElement('select');
+                    select.name = column;
+                    select.required = true;
+                    
+                    // Agregar opción por defecto
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = `Relacionado con: ${column}`;
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    select.appendChild(defaultOption);
+
+                    // Llenar select con list_sectors
+                    list_columns_tanquillas.forEach(column => {
+                      const option = document.createElement('option');
+                      option.value = column;
+                      option.textContent = column;
+                      select.appendChild(option);
+                    });
+
+                    div.appendChild(label);
+                    div.appendChild(select);
+                    selectorsContainerTanquillas.appendChild(div);
+                  });
+
                   list_sectors.forEach(sector => {
                     const option = document.createElement('option');
                     option.value = sector;
@@ -107,7 +249,7 @@
                 } else {
                     downloadLink = document.getElementById('downloadLink');
                     downloadLink.href = `/download/${data.processed_file}`;
-                    downloadLink.style.display = 'block';
+                    downloadLink.style.display = 'flex';
                     downloadLink.innerText = 'Descargar Archivo Procesado';
                 }
             })

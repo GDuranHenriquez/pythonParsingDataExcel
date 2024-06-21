@@ -152,12 +152,25 @@ def get_number(num):
     return str(num)
 
 def get_all_sectors(path):
-  excel_file = pd.ExcelFile(path)
+  path_file = os.path.normpath(os.path.join(current_directory, '..', '..', str(path)))
+  excel_file = pd.ExcelFile(path_file)  
   index = 0
-  sheet_name = excel_file.sheet_names[index]
-  df = read_file(path,  ['sectores'], sheet_name=sheet_name)
+  sheet_name_file = excel_file.sheet_names[index]
+  print(sheet_name_file)
+  df = read_file(path, ['sectores'], str(sheet_name_file))
   
-  return df['sectores'].toList()
+  return df['sectores'].unique().tolist()
+
+def get_all_columns(path, index = 0):
+
+  path_file = os.path.normpath(os.path.join(current_directory, '..', '..', str(path)))
+  workbook = openpyxl.load_workbook(filename = path_file, read_only = True)  
+  sheet = workbook.worksheets[index]
+  column_names = []
+  for cell in sheet[1]:
+    column_names.append(cell.value)
+
+  return column_names 
 
 def read_file(path_file, list_column, name_sheet="Hoja1"):
   try:

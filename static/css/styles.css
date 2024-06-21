@@ -98,3 +98,47 @@ a {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.listSelectoresColunm{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#selectoresColumns{
+  width: 100%;
+  text-align: center;
+  display: none;
+}
+
+#selectoresColumnsPostes{
+  width: 100%;
+  text-align: center;
+  display: none;
+}
+
+#selectoresColumnsTanquilla{
+  width: 100%;
+  text-align: center;
+  display: none;
+}
+
+.selectorsContainers{
+  display: flex;
+  flex-wrap: wrap;
+  width: 95%;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.selectContainerColumn{
+  flex: 1 1 calc(33.33% - 20px);
+  max-width: calc(33.33% - 20px);
+  gap: 10px
+}
+
+.selectContainerColumn > select {
+  width: 100%; 
+  padding: 10px; 
+}

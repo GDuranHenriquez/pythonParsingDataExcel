@@ -47,9 +47,13 @@ def upload_file():
         filenames.append(filename)
 
   file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_demanda.filename)
+  file_path_pdr = os.path.join(app.config['UPLOAD_FOLDER'], file_pdr.filename)
   list_sectors = readData.get_all_sectors(file_path)
+  list_columns_demanda = readData.get_all_columns(file_path)
+  list_columns_postes = readData.get_all_columns(file_path_pdr)
+  list_columns_tanquillas = readData.get_all_columns(file_path_pdr, 1)
 
-  return jsonify({'filenames': filenames, 'list_sectors' : list_sectors }), 200
+  return jsonify({'filenames': filenames, 'list_sectors' : list_sectors, 'list_columns_demanda': list_columns_demanda, 'list_columns_postes': list_columns_postes, 'list_columns_tanquillas': list_columns_tanquillas}), 200
 
 @app.route('/process', methods=['POST'])
 def process_file():
