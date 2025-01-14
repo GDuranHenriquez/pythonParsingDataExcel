@@ -24,9 +24,12 @@ def delete_old_files(directory, extension, age_minutes=45):
           os.remove(file_path)
           print(f"Deleted {file_path}")
 
-
 @app.route('/')
-def index():
+def home():
+  return render_template('/home/home.html')
+
+@app.route('/data-catastro')
+def data_catastro():
   return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
