@@ -4,7 +4,6 @@ import time
 import os
 from src.functions import readData
 
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 

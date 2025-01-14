@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 current_directory = os.path.dirname(__file__)
-file_path = os.path.join(current_directory, '..', 'data' , 'tabla_acta_instalaciones_fat.xls')
+file_path = os.path.join(current_directory, '..', 'data' , 'controldeinstacionestotal1.xls')
 
 def get_all_name_column(df, name):  
   return df[name].unique().tolist()
